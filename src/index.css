@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root, [data-theme="neo-arcade"] {
+  --arcade-chassis: 18 21 30;
+  --arcade-surface: 26 31 48;
+  --arcade-groove: 36 44 68;
+  --arcade-border: 50 61 94;
+  --arcade-cyan: 0 245 212;
+  --arcade-amber: 255 183 3;
+  --arcade-magenta: 247 37 133;
+  --arcade-green: 6 214 160;
+  --arcade-cream: 240 234 214;
+  --arcade-cream-dark: 184 175 156;
+}
+
+[data-theme="gameboy-8bit"] {
+  --arcade-chassis: 22 36 21;
+  --arcade-surface: 34 56 33;
+  --arcade-groove: 48 78 46;
+  --arcade-border: 66 105 62;
+  --arcade-cyan: 155 188 15;
+  --arcade-amber: 139 172 15;
+  --arcade-magenta: 48 98 48;
+  --arcade-green: 155 188 15;
+  --arcade-cream: 224 248 207;
+  --arcade-cream-dark: 134 192 108;
+}
+
+[data-theme="cyber-synth"] {
+  --arcade-chassis: 19 9 36;
+  --arcade-surface: 30 16 56;
+  --arcade-groove: 44 25 79;
+  --arcade-border: 74 43 130;
+  --arcade-cyan: 0 240 255;
+  --arcade-amber: 255 230 0;
+  --arcade-magenta: 255 0 127;
+  --arcade-green: 0 255 170;
+  --arcade-cream: 246 232 255;
+  --arcade-cream-dark: 184 152 217;
+}
+
+[data-theme="solar-flare"] {
+  --arcade-chassis: 28 20 13;
+  --arcade-surface: 43 31 20;
+  --arcade-groove: 61 44 29;
+  --arcade-border: 90 66 44;
+  --arcade-cyan: 255 169 77;
+  --arcade-amber: 255 212 59;
+  --arcade-magenta: 255 107 107;
+  --arcade-green: 105 219 124;
+  --arcade-cream: 255 244 230;
+  --arcade-cream-dark: 216 190 155;
+}
+
+@layer base {
+  html, body {
+    background-color: rgb(var(--arcade-chassis));
+    color: rgb(var(--arcade-cream));
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+}
+
+@layer utilities {
+  .text-glow-cyan {
+    text-shadow: 0 0 12px rgba(0, 245, 212, 0.6);
+  }
+  .text-glow-amber {
+    text-shadow: 0 0 12px rgba(255, 183, 3, 0.6);
+  }
+  .text-glow-magenta {
+    text-shadow: 0 0 12px rgba(247, 37, 133, 0.6);
+  }
+  .border-inset-bezel {
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.6), 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .pb-safe {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0px));
+  }
+  .pt-safe {
+    padding-top: max(0.5rem, env(safe-area-inset-top, 0px));
+  }
+}

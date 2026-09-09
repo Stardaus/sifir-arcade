@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <rect width="192" height="192" rx="42" fill="#12151e"/>
+  <rect x="8" y="8" width="176" height="176" rx="34" fill="#1a1f2e" stroke="#00F5D4" stroke-width="4"/>
+  <circle cx="96" cy="85" r="46" fill="#12151e" stroke="#FFB703" stroke-width="5"/>
+  <!-- Arcade Joystick & Math Cross -->
+  <path d="M96 55 L96 115 M66 85 L126 85" stroke="#00F5D4" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="96" cy="85" r="14" fill="#F72585" stroke="#FFFFFF" stroke-width="3"/>
+  <!-- Action Buttons -->
+  <circle cx="68" cy="148" r="8" fill="#FFB703"/>
+  <circle cx="96" cy="148" r="8" fill="#00F5D4"/>
+  <circle cx="124" cy="148" r="8" fill="#F72585"/>
+  <text x="96" y="176" text-anchor="middle" font-family="monospace" font-weight="900" font-size="14" fill="#F0EAD6" letter-spacing="2">SIFIR</text>
+</svg>
