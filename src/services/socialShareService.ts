@@ -3,7 +3,14 @@ import type { LearnerProfile } from '../types/profile.ts';
 import type { ShareExecutionResult } from '../types/share.ts';
 import { computeMasteryOverview } from './masteryEngine.ts';
 
-const PWA_URL = 'https://sifir-arcade.web.app';
+export const getPwaAppUrl = (): string => {
+  if (typeof window !== 'undefined' && window.location && window.location.origin) {
+    const { origin, pathname } = window.location;
+    const cleanPath = pathname.endsWith('/') ? pathname : `${pathname}/`;
+    return `${origin}${cleanPath}`;
+  }
+  return 'https://stardaus.github.io/sifir-arcade/';
+};
 
 export const getModeCelebrationTitle = (summary: QuizResultSummary): string => {
   if (summary.mode === 'STEP_PRACTICE') {
@@ -20,6 +27,7 @@ export const formatRunCelebrationCaption = (
   profile: LearnerProfile
 ): string => {
   const modeTitle = getModeCelebrationTitle(summary);
+  const appUrl = getPwaAppUrl();
   const lines = [
     `⚡ ${profile.avatar} ${profile.name} just crushed a math run on *Sifir Neo-Arcade*!`,
     `🏆 *${modeTitle}*`,
@@ -27,7 +35,7 @@ export const formatRunCelebrationCaption = (
     `🔥 Max Streak: ${summary.maxCombo}x combo`,
     `⭐ Stars Earned: +${summary.starsEarned}`,
     '',
-    `Train your math automaticity here: ${PWA_URL}`,
+    `Train your math automaticity here: ${appUrl}`,
   ];
 
   return lines.join('\n');
@@ -38,12 +46,13 @@ export const formatMasteryCelebrationCaption = (
   profile: LearnerProfile
 ): string => {
   const stats = computeMasteryOverview(masteryMap);
+  const appUrl = getPwaAppUrl();
   const lines = [
     `📊 ${profile.avatar} ${profile.name}'s *Mastery Radar Update* on Sifir Neo-Arcade!`,
     `🎯 *${stats.masteredCount} / 144 Facts Mastered*`,
     `⚡ Lifetime Accuracy: ${stats.accuracyPercent}% across ${stats.totalAttempts} attempts`,
     '',
-    `Level up your times tables: ${PWA_URL}`,
+    `Level up your times tables: ${appUrl}`,
   ];
 
   return lines.join('\n');

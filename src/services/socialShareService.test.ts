@@ -5,6 +5,7 @@ import {
   formatMasteryCelebrationCaption,
   getWhatsAppShareUrl,
   getModeCelebrationTitle,
+  getPwaAppUrl,
 } from './socialShareService.ts';
 import type { QuizResultSummary, MasteryMap } from '../types/sifir.ts';
 import { createDefaultProfile } from '../types/profile.ts';
@@ -30,6 +31,7 @@ test('formatRunCelebrationCaption generates formatted WhatsApp caption for Step 
   assert.match(caption, /100%/);
   assert.match(caption, /15/);
   assert.match(caption, /Sifir Neo-Arcade/);
+  assert.strictEqual(caption.includes('https://sifir-arcade.web.app'), false);
 });
 
 test('formatRunCelebrationCaption generates formatted caption for Speed Rush with combo and pace', () => {
@@ -141,3 +143,8 @@ test('getModeCelebrationTitle maps modes to consistent celebratory titles', () =
     'Speed Rush Blitz!'
   );
 });
+
+test('getPwaAppUrl returns GitHub Pages fallback when window is not defined', () => {
+  assert.strictEqual(getPwaAppUrl(), 'https://stardaus.github.io/sifir-arcade/');
+});
+
