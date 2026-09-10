@@ -116,10 +116,22 @@ _Avoid_: Event handler, vibration plugin, touch listener
 The progressive web application lifecycle monitor that checks for newer deployment builds on app resume and visibility shifts, immediately refreshing idle screens while preserving active gameplay streaks behind a non-disruptive arcade prompt.
 _Avoid_: PWA updater, reload prompt, cache bust script
 
+### Progress Snapshot & Social Telemetry Mechanics
 
+**Run Telemetry Card**:
+A high-contrast retro-arcade sports graphic (1:1 square) rendered immediately upon completing a learning run (Step Practice, Speed Rush, or Weak-Spot Drill) displaying fact automaticity, accuracy percentage, max combo streak, stars earned, and celebratory mascot badge.
+_Avoid_: Generic screenshot, result popup, social post
 
+**Mastery Radar Card**:
+A milestone achievement graphic (1:1 square) capturing the learner's cumulative progress across all 144 multiplication facts, featuring an integrated 12×12 micro-heatmap matrix, total facts mastered, and overall accuracy.
+_Avoid_: Scorecard, grade report, certificate
 
+**Snapshot Preview Modal**:
+A pre-dispatch inspection modal allowing the parent to review the rendered graphic card, copy celebratory caption text, and trigger native platform sharing or offline image export.
+_Avoid_: Share dialog, export menu, popup sheet
 
-
+**Social Telemetry Dispatcher**:
+The client-side sharing coordinator that attempts native image file sharing via Web Share API (`navigator.share`), gracefully falling back to one-tap clipboard image copying, WhatsApp text links (`wa.me`), and PNG disk download.
+_Avoid_: Share button, social plugin, social SDK
 
 

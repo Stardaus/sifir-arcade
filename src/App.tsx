@@ -280,6 +280,7 @@ export const App: React.FC = () => {
       {celebrationSummary && (
         <CelebrationModal
           summary={celebrationSummary}
+          profile={currentProfile}
           onClose={() => {
             setCelebrationSummary(null);
             setActiveScreen('CABIN_HOME');

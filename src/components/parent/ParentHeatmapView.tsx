@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { Download, Upload, Shield, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Download, Upload, Shield, AlertCircle, CheckCircle2, Share2 } from 'lucide-react';
 import { MasteryMap, SifirFactor, SifirFactRecord } from '../../types/sifir';
 import { LearnerProfile } from '../../types/profile';
 import { storageService } from '../../services/storageService';
+import { computeMasteryOverview } from '../../services/masteryEngine';
 import { TactileButton } from '../common/TactileButton';
 import { Modal } from '../common/Modal';
+import { SnapshotPreviewModal } from '../common/SnapshotPreviewModal';
+import { generateMasteryRadarCard } from '../../services/shareCardGenerator';
+import { formatMasteryCelebrationCaption } from '../../services/socialShareService';
 
 interface ParentHeatmapViewProps {
   readonly profile: LearnerProfile;
@@ -19,18 +23,31 @@ export const ParentHeatmapView: React.FC<ParentHeatmapViewProps> = ({
 }) => {
   const [selectedFact, setSelectedFact] = useState<SifirFactRecord | null>(null);
   const [importStatus, setImportStatus] = useState<string | null>(null);
+  const [isSnapshotOpen, setIsSnapshotOpen] = useState(false);
+  const [snapshotBlob, setSnapshotBlob] = useState<Blob | null>(null);
+  const [caption, setCaption] = useState('');
+  const [isGeneratingSnapshot, setIsGeneratingSnapshot] = useState(false);
+
+  const handleOpenMasterySnapshot = async () => {
+    setIsGeneratingSnapshot(true);
+    try {
+      const blob = await generateMasteryRadarCard(masteryMap, profile);
+      setSnapshotBlob(blob);
+      setCaption(formatMasteryCelebrationCaption(masteryMap, profile));
+      setIsSnapshotOpen(true);
+    } catch {
+      // Graceful fallback
+    } finally {
+      setIsGeneratingSnapshot(false);
+    }
+  };
 
   const factors: SifirFactor[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-  // Calculate high-level stats
+  // Calculate high-level stats via pure masteryEngine
+  const { masteredCount, practicingCount, learningCount, accuracyPercent: overallAccuracy } =
+    computeMasteryOverview(masteryMap);
   const allFacts = Object.values(masteryMap);
-  const masteredCount = allFacts.filter((f) => f.status === 'MASTERED').length;
-  const practicingCount = allFacts.filter((f) => f.status === 'PRACTICING').length;
-  const learningCount = allFacts.filter((f) => f.status === 'LEARNING').length;
-
-  const totalAttempts = allFacts.reduce((sum, f) => sum + f.attempts, 0);
-  const totalCorrect = allFacts.reduce((sum, f) => sum + f.correctCount, 0);
-  const overallAccuracy = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
 
   // Identify bottleneck weak spots (slowest or highest error)
   const weakSpots = allFacts
@@ -85,7 +102,18 @@ export const ParentHeatmapView: React.FC<ParentHeatmapViewProps> = ({
         </div>
 
         {/* Action buttons */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <TactileButton
+            variant="cyan"
+            size="sm"
+            onClick={handleOpenMasterySnapshot}
+            disabled={isGeneratingSnapshot}
+            className="flex items-center gap-1.5"
+          >
+            <Share2 className="w-4 h-4" />
+            <span>{isGeneratingSnapshot ? 'Generating...' : 'Share Radar Card'}</span>
+          </TactileButton>
+
           <TactileButton variant="neutral" size="sm" onClick={handleExport} className="flex items-center gap-1.5">
             <Download className="w-4 h-4" />
             <span>Export Backup</span>
@@ -253,6 +281,17 @@ export const ParentHeatmapView: React.FC<ParentHeatmapViewProps> = ({
             </TactileButton>
           </div>
         </Modal>
+      )}
+
+      {isSnapshotOpen && (
+        <SnapshotPreviewModal
+          isOpen={isSnapshotOpen}
+          onClose={() => setIsSnapshotOpen(false)}
+          imageBlob={snapshotBlob}
+          defaultCaption={caption}
+          title="Mastery Radar Card"
+          filename={`sifir_mastery_radar_${Date.now()}.png`}
+        />
       )}
     </div>
   );

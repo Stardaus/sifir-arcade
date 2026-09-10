@@ -1,4 +1,4 @@
-import { MasteryMap, MasteryStatus, QuestionItem, SifirFactor, SifirFactRecord } from '../types/sifir';
+import type { MasteryMap, MasteryStatus, QuestionItem, SifirFactor, SifirFactRecord } from '../types/sifir.ts';
 
 export const calculateNewMasteryStatus = (
   attempts: number,
@@ -184,5 +184,33 @@ export const generateSmartQuestion = (
     product,
     options: generateDistractorOptions(factorA, factorB),
     diagnosticReason: getDiagnosticReason(record),
+  };
+};
+
+export interface MasteryOverview {
+  readonly masteredCount: number;
+  readonly practicingCount: number;
+  readonly learningCount: number;
+  readonly totalAttempts: number;
+  readonly totalCorrect: number;
+  readonly accuracyPercent: number;
+}
+
+export const computeMasteryOverview = (masteryMap: MasteryMap): MasteryOverview => {
+  const allFacts = Object.values(masteryMap);
+  const masteredCount = allFacts.filter((f) => f.status === 'MASTERED').length;
+  const practicingCount = allFacts.filter((f) => f.status === 'PRACTICING').length;
+  const learningCount = allFacts.filter((f) => f.status === 'LEARNING').length;
+  const totalAttempts = allFacts.reduce((sum, f) => sum + f.attempts, 0);
+  const totalCorrect = allFacts.reduce((sum, f) => sum + f.correctCount, 0);
+  const accuracyPercent = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
+
+  return {
+    masteredCount,
+    practicingCount,
+    learningCount,
+    totalAttempts,
+    totalCorrect,
+    accuracyPercent,
   };
 };
