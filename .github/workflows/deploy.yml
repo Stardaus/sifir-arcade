@@ -29,10 +29,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install 2>&1 | while IFS= read -r line; do echo "::warning::$line"; done
+          if [ ! -d "node_modules/vite" ]; then
+            echo "::error::Vite missing after npm install, attempting with --legacy-peer-deps"
+            npm install --legacy-peer-deps 2>&1 | while IFS= read -r line; do echo "::warning::$line"; done
+          fi
+          if [ ! -d "node_modules/vite" ]; then
+            echo "::error::Vite still missing, attempting npm install --force"
+            npm install --force 2>&1 | while IFS= read -r line; do echo "::warning::$line"; done
+          fi
+          if [ ! -d "node_modules/vite" ]; then
+            exit 1
+          fi
 
       - name: Build
         run: npm run build
