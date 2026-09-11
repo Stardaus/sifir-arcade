@@ -16,6 +16,9 @@ import { LearnerProfile, ArcadeThemeId } from '../../types/profile';
 import { ARCADE_THEMES } from '../../types/theme';
 import { audioEngine } from '../../services/audioEngine';
 
+import { SettingToggleRow } from './SettingToggleRow';
+import { FirmwareInspectorCard } from './FirmwareInspectorCard';
+
 interface ArcadeSettingsModalProps {
   readonly isOpen: boolean;
   readonly profile: LearnerProfile;
@@ -23,8 +26,6 @@ interface ArcadeSettingsModalProps {
   readonly onUpdateProfile: (updated: Partial<LearnerProfile>) => void;
   readonly onOpenParentPortal: () => void;
 }
-
-import { SettingToggleRow } from './SettingToggleRow';
 
 export const ArcadeSettingsModal: React.FC<ArcadeSettingsModalProps> = ({
   isOpen,
@@ -115,30 +116,30 @@ export const ArcadeSettingsModal: React.FC<ArcadeSettingsModalProps> = ({
               </h3>
             </div>
             <div className="grid grid-cols-2 gap-2.5">
-              {ARCADE_THEMES.map((t) => {
-                const isSelected = profile.themeId === t.id;
+              {ARCADE_THEMES.map((theme) => {
+                const isSelected = profile.themeId === theme.id;
                 return (
                   <button
-                    key={t.id}
+                    key={theme.id}
                     type="button"
-                    onClick={() => handleSelectTheme(t.id)}
+                    onClick={() => handleSelectTheme(theme.id)}
                     className={`min-h-[58px] p-2.5 rounded-xl border-2 text-left transition active:scale-[0.98] flex flex-col justify-between cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arcade-cyan ${
                       isSelected
                         ? 'bg-arcade-groove border-arcade-cyan shadow-[0_0_12px_rgba(0,245,212,0.2)]'
                         : 'bg-arcade-surface hover:bg-arcade-groove/60 border-arcade-border/80'
                     }`}
-                    aria-label={`Select ${t.name} theme`}
+                    aria-label={`Select ${theme.name} theme`}
                     aria-pressed={isSelected}
                   >
                     <div className="flex items-center justify-between w-full mb-1">
                       <div className="flex items-center gap-1.5">
-                        <span className="w-3 h-3 rounded-full border border-black/30" style={{ backgroundColor: t.swatches.accent }} aria-hidden="true" />
-                        <span className="w-3 h-3 rounded-full border border-black/30" style={{ backgroundColor: t.swatches.highlight }} aria-hidden="true" />
+                        <span className="w-3 h-3 rounded-full border border-black/30" style={{ backgroundColor: theme.swatches.accent }} aria-hidden="true" />
+                        <span className="w-3 h-3 rounded-full border border-black/30" style={{ backgroundColor: theme.swatches.highlight }} aria-hidden="true" />
                       </div>
-                      <span className="text-[9px] font-mono font-bold px-1 py-0.5 rounded bg-black/40 text-arcade-cream/70">{t.tag}</span>
+                      <span className="text-[9px] font-mono font-bold px-1 py-0.5 rounded bg-black/40 text-arcade-cream/70">{theme.tag}</span>
                     </div>
                     <div className="flex items-center justify-between w-full">
-                      <span className="font-display font-bold text-xs text-arcade-cream leading-tight">{t.name}</span>
+                      <span className="font-display font-bold text-xs text-arcade-cream leading-tight">{theme.name}</span>
                       {isSelected && <Check className="w-3.5 h-3.5 text-arcade-cyan" aria-hidden="true" />}
                     </div>
                   </button>
@@ -246,6 +247,9 @@ export const ArcadeSettingsModal: React.FC<ArcadeSettingsModalProps> = ({
             </div>
             <ChevronRight className="w-4 h-4 text-arcade-amber" aria-hidden="true" />
           </button>
+
+          {/* Section 4: Firmware & Telemetry Inspector */}
+          <FirmwareInspectorCard />
         </div>
       </div>
     </div>

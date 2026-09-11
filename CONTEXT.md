@@ -116,6 +116,18 @@ _Avoid_: Event handler, vibration plugin, touch listener
 The progressive web application lifecycle monitor that checks for newer deployment builds on app resume and visibility shifts, immediately refreshing idle screens while preserving active gameplay streaks behind a non-disruptive arcade prompt.
 _Avoid_: PWA updater, reload prompt, cache bust script
 
+**Build Telemetry Seam**:
+The lightweight version endpoint (`version.json`) generated at compile-time holding release timestamp, commit/build hash, and version tag, queried to verify deployment freshness without parsing heavy assets.
+_Avoid_: Cache buster, API ping, update checker URL
+
+**Firmware & Telemetry Inspector**:
+The diagnostic console interface within the Cabin System Config (Settings Modal) allowing the pilot to inspect active build provenance and trigger on-demand update probes with sanitized status reporting.
+_Avoid_: Dev menu, debug screen, reload button
+
+**Build Stamp**:
+The compile-time release fingerprint injected into the client bundle containing semver, build timestamp, and git commit hash.
+_Avoid_: Build number, version string
+
 ### Progress Snapshot & Social Telemetry Mechanics
 
 **Run Telemetry Card**:

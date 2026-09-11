@@ -49,11 +49,12 @@ export const App: React.FC = () => {
     pwaUpdateService.init();
     const unsubscribe = pwaUpdateService.subscribe((available) => {
       setIsUpdateReady(available);
-      if (available && activeScreen === 'CABIN_HOME') {
-        pwaUpdateService.applyUpdate('CABIN_HOME');
-      }
     });
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    pwaUpdateService.handleScreenNavigation(activeScreen);
   }, [activeScreen]);
 
   // Sync audio, voice, haptics, and theme settings to DOM & engines
@@ -293,7 +294,7 @@ export const App: React.FC = () => {
 
       {/* PWA Update Banner */}
       {isUpdateReady && (
-        <PwaUpdateBanner onReload={() => pwaUpdateService.applyUpdate(activeScreen)} />
+        <PwaUpdateBanner onReload={() => pwaUpdateService.applyUpdate()} />
       )}
     </div>
   );
