@@ -32,7 +32,23 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci || npm install --no-audit
+        run: |
+          echo "=== Node & NPM Version ==="
+          node -v
+          npm -v
+          echo "=== Attempting npm ci ==="
+          npm ci 2>&1 | tee /tmp/npm.log || {
+            echo "=== npm ci failed, trying npm install ==="
+            npm install --prefer-offline --no-audit 2>&1 | tee -a /tmp/npm.log || true
+          }
+          echo "### Dependency Installation Log" >> $GITHUB_STEP_SUMMARY
+          echo '```text' >> $GITHUB_STEP_SUMMARY
+          cat /tmp/npm.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          if [ ! -d "node_modules/vite" ]; then
+            echo "Vite is not installed in node_modules!"
+            exit 1
+          fi
 
       - name: Build
         run: npm run build
