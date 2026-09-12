@@ -32,17 +32,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          echo "::warning::NODE_VERSION: $(node -v) | NPM_VERSION: $(npm -v)"
-          npm install 2>&1 | while IFS= read -r line; do echo "::warning::$line"; done
-          if [ ! -d "node_modules/vite" ]; then
-            for f in /home/runner/.npm/_logs/*.log; do
-              if [ -f "$f" ]; then
-                echo "::error::LOG FILE: $f"
-                tail -n 30 "$f" | while IFS= read -r line; do echo "::warning::DEBUG_LOG: $line"; done
-              fi
-            done
-            exit 1
-          fi
+          npm install -g npm@11
+          npm ci
 
       - name: Build
         run: npm run build
